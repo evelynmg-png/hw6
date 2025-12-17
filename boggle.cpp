@@ -96,4 +96,34 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 {
 //add your solution here!
 
+  if (r >= board.size() || c >= board.size()){
+    return false;
+
+  }
+
+  //extending the word
+  word = word + board[r][c];
+
+  // not prefix or word
+  bool isWord = dict.find(word) != dict.end();
+  bool isPrefix = prefix.find(word) != prefix.end();
+
+  // this checks if word or prefix dont exist
+  if(!isWord && !isPrefix){
+    return false;
+  }
+
+  //recursive call
+  bool longerWord = boggleHelper(dict,prefix,board,word,result,r + dr,c +dc,dr,dc);
+
+  // if a longer word isnt found, and this is the word we are lookign for 
+  // then we inser it to the result
+  if (!longerWord && isWord){
+    result.insert(word);
+    return true;
+
+  }
+
+  return longerWord || isWord;
+
 }
