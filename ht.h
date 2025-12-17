@@ -332,7 +332,7 @@ HashTable<K,V,Prober,Hash,KEqual>::~HashTable()
 template<typename K, typename V, typename Prober, typename Hash, typename KEqual>
 bool HashTable<K,V,Prober,Hash,KEqual>::empty() const
 {
-  return nItems_=0;
+  return nItems_==0;
 
 }
 
@@ -374,12 +374,14 @@ void HashTable<K,V,Prober,Hash,KEqual>::insert(const ItemType& p)
     table_[location] = new HashItem(p);
     nItems_++;
   }
-  else if(kequal_(table_[location]->item.first, p.first) && !table_[location]->deleted){
-    table_[location]->item.second =p.second;
+  else if(table_[location]->deleted){
+    table_[location]->item=p;
+    table_[location]->deleted =false;
+    nItems_++;
   }
   else{
-    table_[location] = new HashItem(p);
-    nItems_++;
+    table_[location]->item.second=p.second;
+    //nItems_++;
   }
 
 
